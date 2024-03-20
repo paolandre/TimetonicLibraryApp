@@ -1,7 +1,8 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">TimeTonicLibraryApp</string>
     <string name="email" />
     <string name="password" />
     <string name="buttonText" />
     <string name="buttonText1">Login</string>
+    <string name="login_empty_error">Please enter your email and password.</string>
 </resources>

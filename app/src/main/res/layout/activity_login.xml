@@ -13,29 +13,32 @@
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:scaleType="centerInside"
-        android:src="@drawable/logo" />
+        android:src="@drawable/logo"
+         />
 
     <EditText
         android:id="@+id/editTextEmail"
         android:layout_width="260dp"
-        android:layout_height="41dp"
+        android:layout_height="48dp"
         android:layout_marginTop="16dp"
         android:background="#FFFEFE"
         android:hint="@string/email"
         android:inputType="textEmailAddress"
         android:textColor="#151515"
-        android:textColorHint="#292626" />
+        android:textColorHint="#292626"
+        android:autofillHints="emailAddress"/>
 
     <EditText
         android:id="@+id/editTextPassword"
         android:layout_width="260dp"
-        android:layout_height="41dp"
+        android:layout_height="48dp"
         android:layout_marginTop="16dp"
         android:background="#FDFDFD"
         android:hint="@string/password"
         android:inputType="textPassword"
         android:textColor="#050505"
-        android:textColorHint="#292828" />
+        android:textColorHint="#292828"
+        android:autofillHints="password"/>
 
     <Button
         android:id="@+id/buttonLogin"
