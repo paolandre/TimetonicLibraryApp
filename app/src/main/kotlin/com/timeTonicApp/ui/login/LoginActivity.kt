@@ -1,14 +1,16 @@
 package com.timeTonicApp.ui.login
 
-import com.example.myapplication.R
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import android.widget.Toast.LENGTH_LONG
 import androidx.appcompat.app.AppCompatActivity
-import com.timeTonicApp.data.model.*
+import com.timeTonicApp.R
+import com.timeTonicApp.data.model.AppKeyResponse
+import com.timeTonicApp.data.model.AuthKeyResponse
+import com.timeTonicApp.data.model.CreateSessKeyResponse
 import com.timeTonicApp.data.remote.RetrofitInstance
 import com.timeTonicApp.ui.landing.LandingPageActivity
 import retrofit2.Call
@@ -34,7 +36,6 @@ class LoginActivity : AppCompatActivity() {
             val password = editTextPassword.text.toString().trim()
             if (email.isNotEmpty() && password.isNotEmpty()) {
                 login(email, password)
-                Log.d("LoginActivity", "Intentando inicio de sesión con email: $email")
             } else {
                 Toast.makeText(this, R.string.login_empty_error, Toast.LENGTH_LONG).show()
             }
@@ -43,16 +44,11 @@ class LoginActivity : AppCompatActivity() {
 
     private fun login(email: String, password: String) {
         val authService = RetrofitInstance.api
-        authService.createAppKey("api").enqueue(object : Callback<AppKeyResponse> {
-            override fun onResponse(
-                call: Call<AppKeyResponse>,
-                response: Response<AppKeyResponse>
-            ) {
+        authService.createAppKey(req = "createAppkey", appName = "TimeTonicApp").enqueue(object : Callback<AppKeyResponse> {
+            override fun onResponse(call: Call<AppKeyResponse>, response: Response<AppKeyResponse>) {
                 if (response.isSuccessful) {
-                    val appKey = response.body()?.appkey
-                    appKey?.let {
-                        getOAuthKey(email, password, it)
-                        Log.d("appkey", "appKey: $appKey")
+                    response.body()?.appkey?.let { appKey ->
+                        callCreateOauthkey(email, password, appKey)
                     } ?: run {
                         showError("App Key retrieval failed")
                     }
@@ -60,81 +56,71 @@ class LoginActivity : AppCompatActivity() {
                     showError("App Key retrieval failed: ${response.errorBody()?.string()}")
                 }
             }
-
             override fun onFailure(call: Call<AppKeyResponse>, t: Throwable) {
                 showError("Network error: ${t.message}")
             }
         })
     }
 
-    private fun getOAuthKey(email: String, password: String, appKey: String) {
+    private fun callCreateOauthkey(email: String, password: String, appKey: String) {
         val authService = RetrofitInstance.api
-        authService.createOAuthKey(email, password, appKey)
-            .enqueue(object : Callback<OauthKeyResponse> {
-                override fun onResponse(
-                    call: Call<OauthKeyResponse>,
-                    response: Response<OauthKeyResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val oauthKey = response.body()?.oauthkey
-                        oauthKey?.let {
-                            getSessionKey(it)
-                        } ?: run {
-                            showError("OAuth Key retrieval failed")
-                        }
-                    } else {
-                        showError("OAuth Key retrieval failed: ${response.errorBody()?.string()}")
+        authService.createOauthkey(
+            req = "createOauthkey",
+            login = email,
+            pwd = password,
+            appkey = appKey
+        ).enqueue(object : Callback<AuthKeyResponse> {
+            override fun onResponse(call: Call<AuthKeyResponse>, response: Response<AuthKeyResponse>) {
+                if (response.isSuccessful) {
+                    response.body()?.oauthkey?.let { oauthKey ->
+                        callCreateSesskey(oauthKey, response.body()?.o_u ?: "")
+                    } ?: run {
+                        showError("OAuth Key retrieval failed")
                     }
+                } else {
+                    showError("OAuth Key retrieval failed: ${response.errorBody()?.string()}")
                 }
-
-                override fun onFailure(call: Call<OauthKeyResponse>, t: Throwable) {
-                    showError("Network error: ${t.message}")
-                }
-            })
+            }
+            override fun onFailure(call: Call<AuthKeyResponse>, t: Throwable) {
+                showError("Network error: ${t.message}")
+            }
+        })
     }
 
-    private fun getSessionKey(oauthKey: String) {
+    private fun callCreateSesskey(oauthkey: String, o_u: String) {
         val authService = RetrofitInstance.api
-        authService.createSessionKey("6.49q/6.49", "createSesskey", "demo", "demo", oauthKey)
-            .enqueue(object : Callback<SessionKeyResponse> {
-                override fun onResponse(
-                    call: Call<SessionKeyResponse>,
-                    response: Response<SessionKeyResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val sessionKey = response.body()?.sesskey
-                        sessionKey?.let {
-                            saveSessionKey(it)
-                            navigateToLandingPage()
-                        } ?: run {
-                            showError("Session Key retrieval failed")
-                        }
-                    } else {
-                        showError("Session Key retrieval failed: ${response.errorBody()?.string()}")
+        authService.createSesskey(
+            req = "createSesskey",
+            o_u = o_u,
+            oauthkey = oauthkey
+        ).enqueue(object : Callback<CreateSessKeyResponse> {
+            override fun onResponse(
+                call: Call<CreateSessKeyResponse>,
+                response: Response<CreateSessKeyResponse>
+            ) {
+                if (response.isSuccessful) {
+                    response.body()?.sesskey?.let {
+                        navigateToLandingPage()
+                    } ?: run {
+                        showError("Session Key retrieval failed")
                     }
+                } else {
+                    showError("Session Key retrieval failed: ${response.errorBody()?.string()}")
                 }
-
-                override fun onFailure(call: Call<SessionKeyResponse>, t: Throwable) {
-                    showError("Network error: ${t.message}")
-                }
-            })
+            }
+            override fun onFailure(call: Call<CreateSessKeyResponse>, t: Throwable) {
+                showError("Network error: ${t.message}")
+            }
+        })
     }
 
-    private fun saveSessionKey(sessionKey: String) {
-        val sharedPreferences = getSharedPreferences("TimeTonicPrefs", MODE_PRIVATE)
-        sharedPreferences.edit().apply {
-            putString("session_key", sessionKey)
-            apply()
-        }
+    private fun showError(message: String) {
+        Toast.makeText(this, message, LENGTH_LONG).show()
     }
 
     private fun navigateToLandingPage() {
         val intent = Intent(this, LandingPageActivity::class.java)
         startActivity(intent)
         finish()
-    }
-
-    private fun showError(message: String) {
-        Toast.makeText(this@LoginActivity, message, Toast.LENGTH_LONG).show()
     }
 }

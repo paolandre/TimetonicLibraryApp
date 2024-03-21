@@ -1,8 +1,10 @@
 <resources>
-    <string name="app_name">TimeTonicLibraryApp</string>
+    <string name="app_name">TimeTonicApp</string>
     <string name="email" />
     <string name="password" />
     <string name="buttonText" />
-    <string name="buttonText1">Login</string>
+    <string name="buttonLogin">Login</string>
     <string name="login_empty_error">Please enter your email and password.</string>
+    <string name="buttonLogOut">Log Out</string>
+    <string name="base_url">https://timetonic.com/live/</string>
 </resources>

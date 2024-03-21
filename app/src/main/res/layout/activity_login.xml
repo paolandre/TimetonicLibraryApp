@@ -26,6 +26,7 @@
         android:inputType="textEmailAddress"
         android:textColor="#151515"
         android:textColorHint="#292626"
+        android:text= "android.developer@timetonic.com"
         android:autofillHints="emailAddress"/>
 
     <EditText
@@ -38,7 +39,9 @@
         android:inputType="textPassword"
         android:textColor="#050505"
         android:textColorHint="#292828"
-        android:autofillHints="password"/>
+        android:autofillHints="password"
+        android:text= "Android.developer1"
+        />
 
     <Button
         android:id="@+id/buttonLogin"
@@ -46,6 +49,6 @@
         android:layout_height="50dp"
         android:layout_marginTop="16dp"
         android:backgroundTint="#FF5722"
-        android:text="@string/buttonText1" />
+        android:text="@string/buttonLogin" />
 
 </LinearLayout>
