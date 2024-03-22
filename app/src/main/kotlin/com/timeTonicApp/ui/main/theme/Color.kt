@@ -1,4 +1,4 @@
-package com.timeTonicApp.ui.main
+package com.timeTonicApp.ui.main.theme
 
 import androidx.compose.ui.graphics.Color
 

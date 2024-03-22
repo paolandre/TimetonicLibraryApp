@@ -1,4 +1,4 @@
-package com.timeTonicApp.ui.main
+package com.timeTonicApp.ui.main.theme
 
 import android.app.Activity
 import android.os.Build
