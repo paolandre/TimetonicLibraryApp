@@ -1,7 +1,9 @@
 package com.timeTonicApp.ui.login
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -100,6 +102,7 @@ class LoginActivity : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
                     response.body()?.sesskey?.let {
+                        saveSessionToken(it)
                         navigateToLandingPage()
                     } ?: run {
                         showError("Session Key retrieval failed")
@@ -114,6 +117,13 @@ class LoginActivity : AppCompatActivity() {
         })
     }
 
+    private fun saveSessionToken(sessionToken: String) {
+        val sharedPreferences = getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
+        with(sharedPreferences.edit()) {
+            putString("SESSION_TOKEN", sessionToken)
+            apply()
+        }
+    }
     private fun showError(message: String) {
         Toast.makeText(this, message, LENGTH_LONG).show()
     }
