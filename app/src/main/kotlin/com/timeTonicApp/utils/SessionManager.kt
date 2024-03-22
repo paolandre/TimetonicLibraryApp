@@ -1,4 +1,4 @@
-package com.timeTonicApp.utils
+/* package com.timeTonicApp.utils
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -36,4 +36,4 @@ class SessionManager(context: Context) {
         editor.remove(USER_TOKEN)
         editor.apply()
     }
-}
+} */

@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "TimetonicLibraryApp"
+rootProject.name = "TimetonicApp"
 include(":app")

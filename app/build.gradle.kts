@@ -4,11 +4,12 @@ plugins {
 }
 
 android {
-    namespace = "com.example.myapplication"
+    namespace = "com.timeTonicApp"
     compileSdk = 34
 
+
     defaultConfig {
-        applicationId = "com.example.myapplication"
+        applicationId = "com.timeTonicApp"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -18,6 +19,7 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        buildConfigField("String", "BASE_URL", "\"https://timetonic.com/live/\"")
     }
 
     buildTypes {
@@ -33,8 +35,10 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"

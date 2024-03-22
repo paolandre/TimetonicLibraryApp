@@ -1,34 +1,33 @@
-/* package com.timeTonicApp.data.remote
+ package com.timeTonicApp.data.remote
 
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.POST
+ import com.timeTonicApp.data.model.*
+ import retrofit2.Call
+ import retrofit2.http.*
 
-interface ApiService {
-    @FormUrlEncoded
-    @POST("/createAppkey")
-    suspend fun createAppKey(@Field("appname") appName: String): AppKeyResponse
+ interface ApiService {
 
-    @FormUrlEncoded
-    @POST("/createOauthkey")
-    suspend fun createOAuthKey(
-        @Field("login") login: String,
-        @Field("pwd") password: String,
-        @Field("appkey") appKey: String
-    ): OAuthKeyResponse
+     @FormUrlEncoded
+     @POST("/live/api.php")
+     fun createAppKey(
+         @Field("req") req: String,
+         @Field("appname") appName: String,
+     ): Call<AppKeyResponse>
 
-    @FormUrlEncoded
-    @POST("/createSesskey")
-    suspend fun createSessionKey(
-        @Field("o_u") oauthUser: String,
-        @Field("oauthkey") oauthKey: String
-    ): SessionKeyResponse
+     @FormUrlEncoded
+     @POST("/live/api.php")
+     fun createOauthkey(
+         @Field("req") req: String,
+         @Field("login") login: String,
+         @Field("pwd") pwd: String,
+         @Field("appkey") appkey: String,
+     ): Call<AuthKeyResponse>
 
-    @FormUrlEncoded
-    @POST("/getAllBooks")
-    suspend fun getAllBooks(
-        @Field("o_u") oauthUser: String,
-        @Field("sesskey") sessionKey: String
-    ): Response<BooksResponse>
-}
-*/
+     @FormUrlEncoded
+     @POST("/live/api.php")
+     fun createSesskey(
+         @Field("req") req: String,
+         @Field("o_u") o_u: String,
+         @Field("oauthkey") oauthkey: String,
+     ): Call<CreateSessKeyResponse>
+
+ }
