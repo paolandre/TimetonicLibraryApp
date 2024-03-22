@@ -30,4 +30,13 @@
          @Field("oauthkey") oauthkey: String,
      ): Call<CreateSessKeyResponse>
 
+     @FormUrlEncoded
+     @POST("live/api.php")
+     fun getAllBooks(
+         @Field("req") request: String,
+         @Field("o_u") oauthUser: String,
+         @Field("u_c") user: String,
+         @Field("sesskey") sessionKey: String
+     ): Call<BooksResponse>
+
  }
