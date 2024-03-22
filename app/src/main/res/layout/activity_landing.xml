@@ -5,21 +5,26 @@
     android:background="#1C2C39"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="16dp">
+    android:padding="50dp">
 
     <ImageView
         android:id="@+id/logo"
-        android:layout_width="260dp"
-        android:layout_height="wrap_content"
+        android:layout_width="174dp"
+        android:layout_height="60dp"
         android:adjustViewBounds="true"
         android:scaleType="centerInside"
-        android:src="@drawable/logo"
-        />
+        android:src="@drawable/logo" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:padding="20dp"/>
 
     <Button
         android:id="@+id/buttonLogOut"
         android:layout_width="264dp"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:backgroundTint="#FF5722"
         android:text="@string/buttonLogOut" />
